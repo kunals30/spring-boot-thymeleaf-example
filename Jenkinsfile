@@ -1,9 +1,11 @@
+
 pipeline {
     agent any
 
     environment {
         SONAR_HOME = tool 'SonarScanner'
-        DOCKER_IMAGE = "13.232.140.129:8083/docker-repo/springboot-app"
+        IMAGE_NAME = "13.232.140.129:8083/docker-repo/springboot-app"
+        IMAGE_TAG = "build-${BUILD_NUMBER}"
     }
 
     stages {
@@ -41,7 +43,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t $DOCKER_IMAGE:latest .'
+                sh 'docker build -t $IMAGE_NAME:$IMAGE_TAG .'
             }
         }
 
@@ -59,7 +61,7 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                sh 'docker push $DOCKER_IMAGE:latest'
+                sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
             }
         }
 
